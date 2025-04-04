@@ -1,3 +1,26 @@
-
+.game {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 10px;
+  justify-items: center;
+  align-items: center;
+}
+.game__cards {
+  width: 90px;
+  height: 125px;
+  font-size: 2rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: lightgray;
+  border: 2px solid #333;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.game__cards:hover {
+  background-color: #ddd;
+}
 
 /*# sourceMappingURL=style.css.map */
