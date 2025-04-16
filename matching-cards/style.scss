@@ -4,7 +4,6 @@
 body {
   
   &.themes__animals {
-    // background-image: url(https://i.pinimg.com/564x/58/83/63/588363427a3b3db8f4569f205c51ef85.jpg);
     background-image: url('./images/animals/animals-bckgrnd.jpg');
     .card--matched {
       box-shadow: 0 0 15px 5px pink;
@@ -18,9 +17,6 @@ body {
       }
     
       &__space {
-        background-color: blue;
-        color: aliceblue;
-    
         &:hover {
           border: 2px solid white;
           background-color: black;
@@ -29,22 +25,23 @@ body {
       }
     
       &__fantasy {
-        background-color: colours.$tertiary-color;
-        color: rgb(79, 163, 79);
+        &:hover {
+          border: 2px solid white;
+          background-color: green;
+          color: gold;
+        }
       }
     }
   }
   &.themes__space  {
-    // background-image: url(https://mrwallpaper.com/images/high/space-aesthetic-spaceship-and-planets-fuucl3o3vlvbkhea.jpg);
     background-image: url('./images/space/space-bckgrnd.webp');
+    
     .card--matched {
       box-shadow: 0 0 15px 5px purple;
        border-color: colours.$tertiary-color;
     }
     .themes{
       &__animals {
-        color: darken(colours.$secondary-color, 10%);
-        background-color: white;
         &:hover {
           border: 2px solid white;
           background-color: pink;
@@ -53,25 +50,22 @@ body {
       }
     
       &__space {
-        background-color: blue ;
-        color: yellow;
-        box-shadow: 0 0 15px 5px purple;
+        background-color: purple ;
+        color: blue;
+        box-shadow: 0 0 15px 5px blue;
         
       }
     
       &__fantasy {
-        background-color: colours.$tertiary-color;
-        color: rgb(79, 163, 79);
         &:hover {
           border: 2px solid white;
-          background-color: pink;
-          color: rebeccapurple;
+          background-color: green;
+          color: gold;
         }
       }
     }
   }
   &.themes__fantasy {
-    // background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo1F4j7p0QKZty_UsxZNg0GbMdVLhCeAa_PjX-yVNCbzfnIXwqUoQ7-H2B8j6G8S1HX-g&usqp=CAU);
     background-image: url('./images/fantasy/fantasy-bckgrnd.jpg');
     .card--matched {
       box-shadow: 0 0 15px 5px yellow;
@@ -79,8 +73,6 @@ body {
     }
     .themes{
       &__animals {
-        color: darken(colours.$secondary-color, 10%);
-        background-color: white;
         &:hover {
           border: 2px solid white;
           background-color: pink;
@@ -89,8 +81,6 @@ body {
       }
     
       &__space {
-        background-color: blue;
-        color: aliceblue;
     
         &:hover {
           border: 2px solid white;
@@ -131,6 +121,7 @@ body {
     font-weight: bold;
     color: darken(colours.$accent-color, 10%);
     min-width: 200px;
+    line-height: 30px;
     transition: opacity 0.3s ease;
     border: 2px solid black;
     border-radius: 100px;
@@ -169,14 +160,13 @@ body {
 
 
     @include media-queries.phone {
-      max-width: 320px;
+      max-width: 300px;
     }
 
     @include media-queries.desktop {
-      max-width: 600px;
+      max-width: 300px;
     }
     
-    /* Card Styles */
     .card {
       width: 95%;
       aspect-ratio: 9 / 13;
@@ -191,10 +181,9 @@ body {
         transform: rotateY(180deg); /* show back side when flipped */
       }
 
-      // &--matched {
-      //   box-shadow: 0 0 15px 5px colours.$tertiary-color;
-      //   border-color: colours.$tertiary-color;}
-  
+      &--matched {
+        transition: all 0.3s ease-in-out;
+      }
 
       &__inner {
         width: 100%;
@@ -203,6 +192,7 @@ body {
         transform-style: preserve-3d; /* 3D flipping effect */
         transition: transform 0.6s; /* Flip animation */
       }
+
 
       &__front,
       &__back {
@@ -274,11 +264,14 @@ body {
     box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
   }
   &__animals {
-    &:hover {
-      border: 2px solid white;
-      background-color: pink;
-      color: rebeccapurple;
-    }
+    color: darken(colours.$secondary-color, 10%);
+    background-color: white; }
+  &__fantasy {
+    background-color: colours.$tertiary-color;
+    color: rgb(79, 163, 79);}
+  &__space{
+    background-color: blue;
+    color: aliceblue;
   }
   
 }
