@@ -1,6 +1,114 @@
 @use "./media-queries";
 @use "./colours";
 
+body {
+  
+  &.themes__animals {
+    // background-image: url(https://i.pinimg.com/564x/58/83/63/588363427a3b3db8f4569f205c51ef85.jpg);
+    background-image: url('./images/animals/animals-bckgrnd.jpg');
+    .card--matched {
+      box-shadow: 0 0 15px 5px pink;
+       border-color: colours.$tertiary-color;
+    }
+    .themes{
+      &__animals {
+        color: darken(colours.$secondary-color, 10%);
+        box-shadow: 0 0 15px 5px pink;
+        background-color: white;
+      }
+    
+      &__space {
+        background-color: blue;
+        color: aliceblue;
+    
+        &:hover {
+          border: 2px solid white;
+          background-color: black;
+          color: white;
+        }
+      }
+    
+      &__fantasy {
+        background-color: colours.$tertiary-color;
+        color: rgb(79, 163, 79);
+      }
+    }
+  }
+  &.themes__space  {
+    // background-image: url(https://mrwallpaper.com/images/high/space-aesthetic-spaceship-and-planets-fuucl3o3vlvbkhea.jpg);
+    background-image: url('./images/space/space-bckgrnd.webp');
+    .card--matched {
+      box-shadow: 0 0 15px 5px purple;
+       border-color: colours.$tertiary-color;
+    }
+    .themes{
+      &__animals {
+        color: darken(colours.$secondary-color, 10%);
+        background-color: white;
+        &:hover {
+          border: 2px solid white;
+          background-color: pink;
+          color: rebeccapurple;
+        }
+      }
+    
+      &__space {
+        background-color: blue ;
+        color: yellow;
+        box-shadow: 0 0 15px 5px purple;
+        
+      }
+    
+      &__fantasy {
+        background-color: colours.$tertiary-color;
+        color: rgb(79, 163, 79);
+        &:hover {
+          border: 2px solid white;
+          background-color: pink;
+          color: rebeccapurple;
+        }
+      }
+    }
+  }
+  &.themes__fantasy {
+    // background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo1F4j7p0QKZty_UsxZNg0GbMdVLhCeAa_PjX-yVNCbzfnIXwqUoQ7-H2B8j6G8S1HX-g&usqp=CAU);
+    background-image: url('./images/fantasy/fantasy-bckgrnd.jpg');
+    .card--matched {
+      box-shadow: 0 0 15px 5px yellow;
+       border-color: colours.$tertiary-color;
+    }
+    .themes{
+      &__animals {
+        color: darken(colours.$secondary-color, 10%);
+        background-color: white;
+        &:hover {
+          border: 2px solid white;
+          background-color: pink;
+          color: rebeccapurple;
+        }
+      }
+    
+      &__space {
+        background-color: blue;
+        color: aliceblue;
+    
+        &:hover {
+          border: 2px solid white;
+          background-color: black;
+          color: white;
+        }
+      }
+    
+      &__fantasy {
+        background-color: green;
+        color: colours.$tertiary-color;
+        box-shadow: 0 0 15px 5px yellow;
+
+      }
+    }
+  }
+}
+
 .heading {
   text-align: center;
   background-color: lighten(colours.$background-color, 6%);
