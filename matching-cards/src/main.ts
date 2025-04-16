@@ -31,6 +31,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Add it to the flippedCards array
             flippedCards.push(card);
+
+            // If two cards are flipped, check for match
+            if (flippedCards.length === 2) {
+                // Cast to HTMLElement for dataset access
+                const firstCard = flippedCards[0] as HTMLElement;
+                const secondCard = flippedCards[1] as HTMLElement;
+
+                // Disable further clicks temporarily
+                canClick = false;
+
+                
+                // Check if the data-name matches
+                if (firstCard.dataset.name === secondCard.dataset.name) {
+                    console.log("Match");
+                
+                    firstCard.classList.add("card--matched");
+                    secondCard.classList.add("card--matched");
+
+                    // Add to matchedCards array
+                    matchedCards.push(firstCard, secondCard);
+
+                    // Reset flippedCards and allow clicks again
+                    flippedCards = [];
+                    canClick = true;
+                } else {
+                    console.log("No Match");
+                }
+            }
+            });
         });
     });
-});
