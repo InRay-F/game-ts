@@ -1,205 +1,209 @@
-// Wait until the HTML content is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
-
-    // Select the game board container from the DOM
-    const gameBoard = document.querySelector(".game__board");
-
-    // Get all card elements and convert the NodeList into a real array
-    const cards = document.querySelectorAll(".card");
-    const cardArr = Array.from(cards);
-
-    // Fisher-Yates shuffle: randomizes the card order
-    for (let i = cardArr.length - 1; i > 0; i--) {
-        const r = Math.floor(Math.random() * (i + 1));
-        [cardArr[i], cardArr[r]] = [cardArr[r], cardArr[i]];
-    }
-
-    // Add the shuffled cards to the game board
-    cardArr.forEach((card) => {
-        gameBoard?.appendChild(card);
-    });
-
-
-    // Grab the message display element
-    const messageDisplay = document.getElementById("display__message") as HTMLElement;
-    const timerDisplay = document.getElementById("display__timer") as HTMLElement;
-
+    const themes = {
+      animals: {
+        backgroundColor: "#A8D5BA",
+        cardBackColor: "#f9e5de",
+        // cardFrontColor: "#1E1F59",
+        images: [
+          "images/animals/cow.png",
+          "images/animals/elephant.webp",
+          "images/animals/fox.png",
+          "images/animals/hamster.png",
+          "images/animals/lion.webp",
+          "images/animals/monkey.webp",
+          "images/animals/panda.webp",
+          "images/animals/penguin.png"
+        ]
+      },
+      space: {
+        backgroundColor: "#0B0C2A",
+        cardBackColor: "#1E1F59",
+        images: [
+          "images/space/planet.png",
+          "images/space/rocket.png",
+          "images/space/star.png",
+          "images/space/ufo.png",
+          "images/space/astronaut.png",
+          "images/space/moon.png",
+          "images/space/alien.png",
+          "images/space/satellite.png"
+        ]
+      },
+      fantasy: {
+        backgroundColor: "#FFD6E8",
+        cardBackColor: "#FF69B4",
+        images: [
+          "images/fantasy/dragon.png",
+          "images/fantasy/unicorn.png",
+          "images/fantasy/fairy.png",
+          "images/fantasy/castle.png",
+          "images/fantasy/sword.png",
+          "images/fantasy/potion.png",
+          "images/fantasy/wizard.png",
+          "images/fantasy/phoenix.png"
+        ]
+      }
+    };
+  
+    const gameBoard = document.getElementById("game-board")!;
+    const messageDisplay = document.getElementById("display__message")!;
+    const timerDisplay = document.getElementById("display__timer")!;
+    const hintButton = document.getElementById("hint-button")!;
+    const restartButton = document.getElementById("restart-button")!;
+  
+    let flippedCards: HTMLElement[] = [];
+    let matchedCards: HTMLElement[] = [];
+    let canClick = true;
+    let hintUses = 0;
     let time = 0;
     let timerInterval: number | undefined;
-
+    let currentTheme: keyof typeof themes = "animals"; // default
+  
+    const matchMessages = ["Yay!", "You got it!", "Nice match!", "Woohoo!", "😄"];
+    const noMatchMessages = ["Oops!", "Try again!", "Not quite!", "😭"];
+  
+    function getRandomMessage(list: string[]) {
+      const index = Math.floor(Math.random() * list.length);
+      return list[index];
+    }
+  
     function startTimer() {
-        time = 0;
+      time = 0;
+      timerDisplay.textContent = `Time: ${time}s`;
+      timerInterval = window.setInterval(() => {
+        time++;
         timerDisplay.textContent = `Time: ${time}s`;
-        timerInterval = window.setInterval(() => {
-            time++;
-            timerDisplay.textContent = `Time: ${time}s`;
-        }, 1000);
+      }, 1000);
     }
+  
     function stopTimer() {
-        clearInterval(timerInterval);
+      clearInterval(timerInterval);
     }
-
-    startTimer();
-
-    // Arrays to track flipped and matched cards
-    let flippedCards: Element[] = [];
-    let matchedCards: Element[] = [];
-
-    // Flag to temporarily disable clicks when 2 cards are being compared
-    let canClick = true;
-    
-
-    // Add a click event to each card
-    cardArr.forEach((card) => {
+  
+    function createCard(imageSrc: string, name: string, cardBackColor: string): HTMLElement {
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.dataset.name = name;
+  
+      const inner = document.createElement("div");
+      inner.classList.add("card__inner");
+  
+      const front = document.createElement("div");
+      front.classList.add("card__front");
+      const frontImg = document.createElement("img");
+      frontImg.src = imageSrc;
+      front.appendChild(frontImg);
+  
+      const back = document.createElement("div");
+      back.classList.add("card__back");
+      back.style.backgroundColor = cardBackColor;
+  
+      inner.appendChild(front);
+      inner.appendChild(back);
+      card.appendChild(inner);
+  
+      return card;
+    }
+  
+    function setupGameLogic(cards: HTMLElement[]) {
+      flippedCards = [];
+      matchedCards = [];
+      canClick = true;
+      hintUses = 0;
+      messageDisplay.textContent = "";
+      timerDisplay.style.display = "block";
+      hintButton.disabled = false;
+      stopTimer();
+      startTimer();
+  
+      cards.forEach(card => {
         card.addEventListener("click", () => {
-            // Block clicks if we're waiting to flip cards back
-            if (!canClick) return;
-
-            // Do nothing if card is already matched or flipped
-            if (matchedCards.includes(card) || flippedCards.includes(card)) return;
-
-            // Log card ID for debugging
-            console.log("Card clicked:", card.id);
-
-            // Flip the card visually
-            card.classList.add("card--flipped");
-
-            // Add it to the flippedCards array
-            flippedCards.push(card);
-
-            // If two cards are flipped, check for match
-            if (flippedCards.length === 2) {
-                // Cast to HTMLElement for dataset access
-                const firstCard = flippedCards[0] as HTMLElement;
-                const secondCard = flippedCards[1] as HTMLElement;
-
-                // Disable further clicks temporarily
-                canClick = false;
-
-                const matchMessages = ["Yay!", "You got it!", "Nice match!", "Woohoo!", "😄", "👏", "👍", "👌"];
-                const noMatchMessages = ["Oops!", "Try again!", "Not quite!", "Almost!", "😭", "👎", "🥺", "🙈"] ;
-
-                function getRandomMessage(messages: string[]): string {
-                    const index = Math.floor(Math.random() * messages.length);
-                    return messages[index];
-                  }
-                  
-                // Check if the data-name matches
-                if (firstCard.dataset.name === secondCard.dataset.name) {
-                    console.log("Match");
-                    messageDisplay.textContent = getRandomMessage(matchMessages);
-
-                    firstCard.classList.add("card--matched");
-                    secondCard.classList.add("card--matched");
-
-                    // Add to matchedCards array
-                    matchedCards.push(firstCard, secondCard);
-
-                    // Reset flippedCards and allow clicks again
-                    flippedCards = [];
-                    canClick = true;
-                } else {
-                    console.log("No Match");
-                    messageDisplay.textContent = getRandomMessage(noMatchMessages);
-
-
-                    // Wait 1 second before flipping them back
-                    setTimeout(() => {
-                        firstCard.classList.remove("card--flipped");
-                        secondCard.classList.remove("card--flipped");
-                        flippedCards = [];
-                        canClick = true;
-                        messageDisplay.textContent = "";
-                    }, 1000);
-                }
-
-                // If all cards are matched, display win message
-                if (matchedCards.length === cards.length) {
-                    stopTimer();
-                    messageDisplay.textContent = `🎉You won & in ${time} seconds! WOW🥳`;
-                    timerDisplay.style.display = "none";
-                }
+          if (!canClick || flippedCards.includes(card) || matchedCards.includes(card)) return;
+  
+          card.classList.add("card--flipped");
+          flippedCards.push(card);
+  
+          if (flippedCards.length === 2) {
+            const [firstCard, secondCard] = flippedCards;
+            canClick = false;
+  
+            if (firstCard.dataset.name === secondCard.dataset.name) {
+              messageDisplay.textContent = getRandomMessage(matchMessages);
+              matchedCards.push(firstCard, secondCard);
+              flippedCards = [];
+              canClick = true;
+            } else {
+              messageDisplay.textContent = getRandomMessage(noMatchMessages);
+              setTimeout(() => {
+                firstCard.classList.remove("card--flipped");
+                secondCard.classList.remove("card--flipped");
+                flippedCards = [];
+                canClick = true;
+                messageDisplay.textContent = "";
+              }, 1000);
             }
+  
+            if (matchedCards.length === cards.length) {
+              stopTimer();
+              messageDisplay.textContent = `🎉 You won in ${time} seconds! WOW 🥳`;
+              timerDisplay.style.display = "none";
+            }
+          }
         });
+      });
+    }
+  
+    function startGame(themeName: keyof typeof themes) {
+      currentTheme = themeName;
+      const theme = themes[themeName];
+  
+      document.body.className = `themes__${themeName}`;
+      gameBoard.innerHTML = "";
+  
+      const images = [...theme.images, ...theme.images];
+      const shuffled = images.sort(() => 0.5 - Math.random());
+  
+      const newCards = shuffled.map(img => {
+        const name = img.split("/").pop()?.split(".")[0] || "";
+        return createCard(img, name, theme.cardBackColor);
+      });
+  
+      newCards.forEach(card => gameBoard.appendChild(card));
+      setupGameLogic(newCards);
+    }
+  
+    // Theme button events
+    document.getElementById("theme-1")?.addEventListener("click", () => startGame("animals"));
+    document.getElementById("theme-2")?.addEventListener("click", () => startGame("space"));
+    document.getElementById("theme-3")?.addEventListener("click", () => startGame("fantasy"));
+  
+    // Restart game
+    restartButton.addEventListener("click", () => {
+      startGame(currentTheme);
     });
-    // Grab the hint button
-    const hintButton = document.getElementById("hint-button") as HTMLButtonElement;
-    let hintUses = 0; // Tracks how many times the hint has been used
-    const hintLimit = 2; // Max number of allowed hint uses
-
-    hintButton?.addEventListener("click", () => {
-         // Stop if hint limit has been reached
-        if (hintUses >= hintLimit) {
-            console.log("No more hints left!");
-            hintButton.disabled = true;
-            return; // Stop the function here
-        }
-        
-    // Increase hint use count BEFORE applying the hint logi
-        hintUses++; 
-        console.log("Hint used!", `(${hintUses}/${hintLimit})`);
-        // Disable clicking temporarily
-        canClick = false;
-    
-        // Find unmatched & unflipped cards
-        const hintCards = cardArr.filter((card) => {
-            return !matchedCards.includes(card) && !flippedCards.includes(card);
-        });
-    
-        // Flip them temporarily
-        hintCards.forEach((card) => card.classList.add("card--flipped"));
-    
-        // Hide them again after 1 second
-        setTimeout(() => {
-            hintCards.forEach((card) => card.classList.remove("card--flipped"));
-            canClick = true;
-        }, 1000);
-
-         // Disable the hint button if the limit is now reached
-    if (hintUses >= hintLimit) {
+  
+    // Hint logic
+    hintButton.addEventListener("click", () => {
+      if (hintUses >= 2) {
         hintButton.disabled = true;
-    };
-        
-    });
-
-
-    // Grab the restart button
-    const restartButton = document.getElementById("restart-button");
-
-    // Add a click event to the restart button
-    restartButton?.addEventListener("click", () => {
-        // Reset game state
-        flippedCards = [];
-        matchedCards = [];
+        return;
+      }
+  
+      hintUses++;
+      canClick = false;
+  
+      const cards = Array.from(gameBoard.querySelectorAll(".card")) as HTMLElement[];
+      const unmatched = cards.filter(card => !card.classList.contains("card--flipped") && !matchedCards.includes(card));
+  
+      unmatched.forEach(card => card.classList.add("card--flipped"));
+  
+      setTimeout(() => {
+        unmatched.forEach(card => card.classList.remove("card--flipped"));
         canClick = true;
-        messageDisplay.textContent = "";
-        stopTimer(); // Stop old timer if running
-        startTimer(); // Start a new one
-        hintUses = 0;
-        hintButton.disabled = false;
-        timerDisplay.style.display = "block";
-
-       
-        // Unflip all cards visually
-        cardArr.forEach((card) => {
-            card.classList.remove("card--flipped");
-        });
-
-        cardArr.forEach((card) => {
-            card.classList.remove("card--matched");
-        });
-
-        // Shuffle cards again using Fisher-Yates
-        for (let i = cardArr.length - 1; i > 0; i--) {
-            const r = Math.floor(Math.random() * (i + 1));
-            [cardArr[i], cardArr[r]] = [cardArr[r], cardArr[i]];
-        }
-
-        // Clear the board and re-append the shuffled cards
-        gameBoard!.innerHTML = "";
-        cardArr.forEach((card) => {
-            gameBoard?.appendChild(card);
-        });
+      }, 1000);
     });
-    
-});
+  
+    // Start with default theme
+    startGame("animals");
+  });
+  
