@@ -2,43 +2,43 @@
 
 ## GOALS
 
-[ ] game works
+[x] game works
 
-[ ] break down problem
+[x] break down problem
 
-[ ] git + github flow
+[x] git + github flow
 
-[ ] scope
+[x] scope
 
 ## REQUIREMENTS
 
-[ ] <div class='grid'><div>
+[x] <div class='grid'><div>
 
-[ ] pseudocode
+[x] pseudocode
 
-[ ] version control
+[x] version control
 
-[ ] readability
+[x] readability
 
-[ ] functions
+[x] functions
 
-[ ] correct format
+[x] correct format
 
-[ ] suitable indentation
+[x] suitable indentation
 
-[ ] suitable variable names
+[x] suitable variable names
 
-[ ] code
+[x] code
 
-[ ] understand it?
+[x] understand it?
 
-[ ] can explain it?
+[x] can explain it?
 
-[ ] click / keypress events <- no restarts
+[x] click / keypress events <- no restarts
 
-[ ] mobile first
+[x] mobile first
 
-[ ] Host it online (use GitHub pages)
+[x] Host it online (use GitHub pages)
 
 ## Inital Ideas
 
