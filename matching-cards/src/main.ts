@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     const themes = {
       animals: {
-        backgroundColor: "#A8D5BA",
         cardBackColor: "#f9e5de",
-        // cardFrontColor: "#1E1F59",
+        cardFrontColor: "#c1b1ce",
+        cardMatchedColor: "#9dd9d2",
         images: [
           "images/animals/cow.png",
           "images/animals/elephant.webp",
@@ -16,33 +16,43 @@ document.addEventListener("DOMContentLoaded", () => {
         ]
       },
       space: {
-        backgroundColor: "#0B0C2A",
         cardBackColor: "#1E1F59",
+        cardFrontColor: "#9683EC",
+        cardMatchedColor: "#28c4f5",
         images: [
+          "images/space/alien.webp",
+          "images/space/astronaut.webp",
+          "images/space/galaxy.webp",
+          "images/space/moon.png",
           "images/space/planet.png",
           "images/space/rocket.png",
           "images/space/star.png",
-          "images/space/ufo.png",
-          "images/space/astronaut.png",
-          "images/space/moon.png",
-          "images/space/alien.png",
-          "images/space/satellite.png"
+          "images/space/sun.png"
         ]
       },
       fantasy: {
-        backgroundColor: "#FFD6E8",
-        cardBackColor: "#FF69B4",
+        cardBackColor: "#D0F0C0",
+        cardFrontColor: "#E3DAC9",
+        cardMatchedColor: "#a0d995",
         images: [
-          "images/fantasy/dragon.png",
-          "images/fantasy/unicorn.png",
-          "images/fantasy/fairy.png",
           "images/fantasy/castle.png",
-          "images/fantasy/sword.png",
+          "images/fantasy/crown.png",
+          "images/fantasy/dragon.webp",
+          "images/fantasy/griffin.webp",
           "images/fantasy/potion.png",
-          "images/fantasy/wizard.png",
-          "images/fantasy/phoenix.png"
+          "images/fantasy/sword.png",
+          "images/fantasy/unicorn.png",
+          "images/fantasy/wand.png"
         ]
       }
+    };
+  
+    const sounds = {
+      flip: new Audio("sounds/flip.mp3"),
+      match: new Audio("sounds/match.wav"),
+      win: new Audio("sounds/win.mp3"),
+      hint: new Audio("sounds/hint.wav"),
+      again: new Audio("sounds/again.wav")
     };
   
     const gameBoard = document.getElementById("game-board")!;
@@ -57,7 +67,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let hintUses = 0;
     let time = 0;
     let timerInterval: number | undefined;
-    let currentTheme: keyof typeof themes = "animals"; // default
+    let hasStarted = false; // ✅ new flag
+    let currentTheme: keyof typeof themes = "animals";
   
     const matchMessages = ["Yay!", "You got it!", "Nice match!", "Woohoo!", "😄"];
     const noMatchMessages = ["Oops!", "Try again!", "Not quite!", "😭"];
@@ -80,16 +91,19 @@ document.addEventListener("DOMContentLoaded", () => {
       clearInterval(timerInterval);
     }
   
-    function createCard(imageSrc: string, name: string, cardBackColor: string): HTMLElement {
+    function createCard(imageSrc: string, name: string, cardBackColor: string, cardFrontColor: string, cardMatchedColor: string): HTMLElement {
       const card = document.createElement("div");
       card.classList.add("card");
       card.dataset.name = name;
+      card.dataset.matchedColor = cardMatchedColor;
   
       const inner = document.createElement("div");
       inner.classList.add("card__inner");
   
       const front = document.createElement("div");
       front.classList.add("card__front");
+      front.style.backgroundColor = cardFrontColor;
+  
       const frontImg = document.createElement("img");
       frontImg.src = imageSrc;
       front.appendChild(frontImg);
@@ -110,17 +124,24 @@ document.addEventListener("DOMContentLoaded", () => {
       matchedCards = [];
       canClick = true;
       hintUses = 0;
-      messageDisplay.textContent = "";
+      hasStarted = false; // ✅ reset the flag
+      stopTimer();         // ✅ reset timer
+      timerDisplay.textContent = "Time: 0s"; // ✅ reset display
       timerDisplay.style.display = "block";
       hintButton.disabled = false;
-      stopTimer();
-      startTimer();
+      messageDisplay.textContent = "";
   
       cards.forEach(card => {
         card.addEventListener("click", () => {
           if (!canClick || flippedCards.includes(card) || matchedCards.includes(card)) return;
   
+          if (!hasStarted) {
+            hasStarted = true;     // ✅ first click starts the timer
+            startTimer();
+          }
+  
           card.classList.add("card--flipped");
+          sounds.flip.play();
           flippedCards.push(card);
   
           if (flippedCards.length === 2) {
@@ -128,8 +149,17 @@ document.addEventListener("DOMContentLoaded", () => {
             canClick = false;
   
             if (firstCard.dataset.name === secondCard.dataset.name) {
+              sounds.match.play();
               messageDisplay.textContent = getRandomMessage(matchMessages);
               matchedCards.push(firstCard, secondCard);
+  
+              const matchedColor = firstCard.dataset.matchedColor!;
+              firstCard.querySelector(".card__front")!.setAttribute("style", `background-color: ${matchedColor}`);
+              secondCard.querySelector(".card__front")!.setAttribute("style", `background-color: ${matchedColor}`);
+  
+              firstCard.classList.add("card--matched");
+              secondCard.classList.add("card--matched");
+  
               flippedCards = [];
               canClick = true;
             } else {
@@ -145,6 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
             if (matchedCards.length === cards.length) {
               stopTimer();
+              sounds.win.play();
               messageDisplay.textContent = `🎉 You won in ${time} seconds! WOW 🥳`;
               timerDisplay.style.display = "none";
             }
@@ -165,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
       const newCards = shuffled.map(img => {
         const name = img.split("/").pop()?.split(".")[0] || "";
-        return createCard(img, name, theme.cardBackColor);
+        return createCard(img, name, theme.cardBackColor, theme.cardFrontColor, theme.cardMatchedColor);
       });
   
       newCards.forEach(card => gameBoard.appendChild(card));
@@ -179,6 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     // Restart game
     restartButton.addEventListener("click", () => {
+      sounds.again.play();
       startGame(currentTheme);
     });
   
@@ -196,6 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const unmatched = cards.filter(card => !card.classList.contains("card--flipped") && !matchedCards.includes(card));
   
       unmatched.forEach(card => card.classList.add("card--flipped"));
+      sounds.hint.play();
   
       setTimeout(() => {
         unmatched.forEach(card => card.classList.remove("card--flipped"));
