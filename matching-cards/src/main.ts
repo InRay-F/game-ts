@@ -8,6 +8,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const cards = document.querySelectorAll(".card");
     const cardArr = Array.from(cards);
 
+    // Fisher-Yates shuffle: randomizes the card order
+    for (let i = cardArr.length - 1; i > 0; i--) {
+        const r = Math.floor(Math.random() * (i + 1));
+        [cardArr[i], cardArr[r]] = [cardArr[r], cardArr[i]];
+    }
+
+    // Add the shuffled cards to the game board
+    cardArr.forEach((card) => {
+        gameBoard?.appendChild(card);
+    });
+
 
     // Grab the message display element
     const messageDisplay = document.getElementById("display__message") as HTMLElement;
