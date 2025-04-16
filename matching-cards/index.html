@@ -8,178 +8,187 @@
     <title>Matching Card Game</title>
   </head>
   <body>
-    <h1>Find All Pairs!</h1>
-
+    <h1 class="heading">Find All Pairs!</h1>
+    <div class="display" id="display">
+      <div class="display__message" id="display__message"></div> 
+      <div class="display__timer" id="display__timer">Time: 0s</div>
+    </div>
     <section id="game" class="game">
       <div class="game__board">
         <button class="card" id="card-1" data-name="penguin">
           <div class="card__inner">
             <div class="card__front">
               <img
-                src="./images/penguin.png"
+                src="./images/animals/penguin.png"
                 alt="A cute cartoon penguin waving whilst sitting"
               />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
         <button class="card" id="card-2" data-name="penguin">
           <div class="card__inner">
             <div class="card__front">
               <img
-                src="./images/penguin.png"
+                src="./images/animals/penguin.png"
                 alt="A cute cartoon penguin waving whilst sitting"
               />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
         <button class="card" id="card-3" data-name="panda">
           <div class="card__inner">
             <div class="card__front">
               <img
-                src="./images/panda.webp"
+                src="./images/animals/panda.webp"
                 alt="A cute cartoon panda eating sushi whilst sitting"
               />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
         <button class="card" id="card-4" data-name="panda">
           <div class="card__inner">
             <div class="card__front">
               <img
-                src="./images/panda.webp"
+                src="./images/animals/panda.webp"
                 alt="A cute cartoon panda eating sushi whilst sitting"
               />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
         <button class="card" id="card-5" data-name="monkey">
           <div class="card__inner">
             <div class="card__front">
               <img
-                src="./images/monkey.webp"
+                src="./images/animals/monkey.webp"
                 alt="A cute cartoon monkey eating a banana whilst sitting"
               />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
         <button class="card" id="card-6" data-name="monkey">
           <div class="card__inner">
             <div class="card__front">
               <img
-                src="./images/monkey.webp"
+                src="./images/animals/monkey.webp"
                 alt="A cute cartoon monkey eating a banana whilst sitting"
               />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
         <button class="card" id="card-7" data-name="lion">
           <div class="card__inner">
             <div class="card__front">
-              <img src="./images/lion.webp" alt="A cute cartoon lion sitting" />
+              <img src="./images/animals/lion.webp" alt="A cute cartoon lion sitting" />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
         <button class="card" id="card-8" data-name="lion">
           <div class="card__inner">
             <div class="card__front">
-              <img src="./images/lion.webp" alt="A cute cartoon lion sitting" />
+              <img src="./images/animals/lion.webp" alt="A cute cartoon lion sitting" />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
         <button class="card" id="card-9" data-name="hamster">
           <div class="card__inner">
             <div class="card__front">
               <img
-                src="./images/hamster.png"
+                src="./images/animals/hamster.png"
                 alt="A cute cartoon hamster eating a donut whilst sitting"
               />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
         <button class="card" id="card-10" data-name="hamster">
           <div class="card__inner">
             <div class="card__front">
               <img
-                src="./images/hamster.png"
+                src="./images/animals/hamster.png"
                 alt="A cute cartoon hamster eating a donut whilst sitting"
               />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
         <button class="card" id="card-11" data-name="fox">
           <div class="card__inner">
             <div class="card__front">
-              <img src="./images/fox.png" alt="A cute cartoon fox sitting" />
+              <img src="./images/animals/fox.png" alt="A cute cartoon fox sitting" />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
         <button class="card" id="card-12" data-name="fox">
           <div class="card__inner">
             <div class="card__front">
-              <img src="./images/fox.png" alt="A cute cartoon fox sitting" />
+              <img src="./images/animals/fox.png" alt="A cute cartoon fox sitting" />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
         <button class="card" id="card-13" data-name="elephant">
           <div class="card__inner">
             <div class="card__front">
               <img
-                src="./images/elephant.webp"
+                src="./images/animals/elephant.webp"
                 alt="A cute cartoon elephant sitting"
               />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
         <button class="card" id="card-14" data-name="elephant">
           <div class="card__inner">
             <div class="card__front">
               <img
-                src="./images/elephant.webp"
+                src="./images/animals/elephant.webp"
                 alt="A cute cartoon elephant sitting"
               />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
         <button class="card" id="card-15" data-name="cow">
           <div class="card__inner">
             <div class="card__front">
-              <img src="./images/cow.png" alt="A cute cartoon cow sitting" />
+              <img src="./images/animals/cow.png" alt="A cute cartoon cow sitting" />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
         <button class="card" id="card-16" data-name="cow">
           <div class="card__inner">
             <div class="card__front">
-              <img src="./images/cow.png" alt="A cute cartoon cow sitting" />
+              <img src="./images/animals/cow.png" alt="A cute cartoon cow sitting" />
             </div>
-            <div class="card__back"></div>
+            <div class="card__back">?</div>
           </div>
         </button>
       </div>
     </section>
 
     <br />
+    <div class="controls">
+      <button class="controls__restart" id="restart-button">AGAIN?</button>
+      <button class="controls__hint" id="hint-button">HINT</button>
+    </div>
 
-    <div class="game-controls">
-      <button id="start-button">Start</button>
-      <button id="restart-button">Again!</button>
+    <div class="themes">
+      <button class="themes__animals" id="theme-1">Animals</button>
+      <button class="themes__space" id="theme-2">Space</button>
+      <button class="themes__fantasy" id="theme-3">Fantasy</button>
     </div>
 
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
+
