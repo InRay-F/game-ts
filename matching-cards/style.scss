@@ -1,23 +1,14 @@
 @use "./media-queries";
 @use "./colours";
 
-body.themes__animals {
-  background-image: url(https://i.pinimg.com/564x/58/83/63/588363427a3b3db8f4569f205c51ef85.jpg)
-}
-body.themes__space  {
-  background-image: url(https://mrwallpaper.com/images/high/space-aesthetic-spaceship-and-planets-fuucl3o3vlvbkhea.jpg);
-}
-body.themes__fantasy {
-  background-image: url(https://wallpapersok.com/images/hd/fantasy-art-mushroom-aesthetic-9tcqwlm4mlsp8e8g.jpg);
-}
-
-  .heading {
+.heading {
   text-align: center;
-  background-color: lighten(colours.$background-color, 6% );
+  background-color: lighten(colours.$background-color, 6%);
   max-width: 250px; 
   border-radius: 100px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  margin: 0 auto 1rem auto; // centers the box and adds bottom spacing
+  margin: 0 auto 1rem auto;
+  color: black;
 }
 
 .display {
@@ -26,41 +17,35 @@ body.themes__fantasy {
   justify-content: center;
   margin-bottom: 10px;
 
-  &__message{
-  text-align: center;
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: darken(colours.$accent-color, 10%);
-  // margin: 0 auto auto; // centers the box
-  // height: 2rem;
-  min-width: 200px;
-  transition: opacity 0.3s ease;
-  border: 2px solid black;
-  border-radius: 100px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background-color: lighten(colours.$background-color, 6% );
+  &__message {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: darken(colours.$accent-color, 10%);
+    min-width: 200px;
+    transition: opacity 0.3s ease;
+    border: 2px solid black;
+    border-radius: 100px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: lighten(colours.$background-color, 6%);
   }
+
   &__timer {
-  text-align: center;
-  // margin: 0 auto auto; // centers the box
-  // height: 2rem;
- min-width: 100px;
-  // transition: opacity 0.3s ease;
-  border: 2px solid black;
-  border-radius: 100px;
-  background-color: lighten(colours.$background-color, 6% );
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: colours.$accent-color;
-  margin-top: 10px;
-}
+    text-align: center;
+    min-width: 100px;
+    border: 2px solid black;
+    border-radius: 100px;
+    background-color: lighten(colours.$background-color, 6%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: colours.$accent-color;
+    margin-top: 10px;
+  }
 }
 
 .game {
-  // padding: 1rem;
-
   &__board {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -68,81 +53,77 @@ body.themes__fantasy {
     max-width: 400px;
     margin: 0 auto;
     justify-content: center;
-    padding: 1rem;
+    padding: 1.5rem;
     border: 2px solid colours.$border-color;
     border-radius: 10px;
     background-color: colours.$background-color;
     box-shadow: 0 10px 18px rgba(0, 0, 0, 0.2);
 
+
     @include media-queries.phone {
       max-width: 320px;
     }
+
     @include media-queries.desktop {
       max-width: 600px;
     }
-  }
+    
+    /* Card Styles */
+    .card {
+      width: 95%;
+      aspect-ratio: 9 / 13;
+      border: 2px solid colours.$border-color;
+      border-radius: 10px;
+      padding: 0;
+      perspective: 1000px; /* 3D effect */
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
-}
+      &--flipped .card__inner {
+        transform: rotateY(180deg); /* show back side when flipped */
+      }
 
+      // &--matched {
+      //   box-shadow: 0 0 15px 5px colours.$tertiary-color;
+      //   border-color: colours.$tertiary-color;}
+  
 
-.card {
-  width: 100%;
-  aspect-ratio: 9/13;
-  border: 2px solid colours.$border-color;
-  border-radius: 10px;
-  padding: 0;
-  perspective: 1000px; // 3d effect
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      &__inner {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d; /* 3D flipping effect */
+        transition: transform 0.6s; /* Flip animation */
+      }
 
-  &__inner {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d; // 3d flipping
-    transition: transform 0.6s; // flip animation
-  }
-  &--flipped {
-    .card__inner {
-    transform: rotateY(180deg); // show back side by default  
-  }
-  }
+      &__front,
+      &__back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-  &--matched {
-    box-shadow: 0 0 15px 5px colours.$tertiary-color;
-    border-color: colours.$tertiary-color;
-    .card__front {
-    background-color: colours.$secondary-color;
-    }
-  }
+      &__front {
+      transform: rotateY(180deg); /* Front is initially hidden */
 
-  &__front,
-  &__back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: 0.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+        img {
+          width: 90%;
+          height: auto;
+        }
+      }
 
-  &__front {
-    background-color: colours.$primary-color;
-    transform: rotateY(180deg); // back is what user sees first
-    img {
-      width: 90%;
-      height: auto;
-    }
-  }
-
-  &__back {
-    background-color: colours.$tertiary-color;
-    transform: rotateY(0deg); // keep front hidden
-    &:hover {
-      background-color: colours.$secondary-color;
-      color: colours.$tertiary-color;
+      &__back {
+        transform: rotateY(0deg); /* Back is visible */
+        &:hover {
+          background-color: colours.$secondary-color;
+          color: colours.$tertiary-color;
+        }
+      }
     }
   }
 }
@@ -154,22 +135,19 @@ body.themes__fantasy {
   height: 50px;
 
   button {
-    // padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    border: 4px solid darken(colours.$background-color, 10%);
+    border: 4px solid lighten(colours.$background-color, 10%);
     border-radius: 100px;
-    background-color: colours.$tertiary-color;
-    color: darken(colours.$secondary-color, 30%);
+    background-color: colours.$background-color;
+    color: darken(colours.$primary-color, 20%);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
 
     &:hover {
       background-color: colours.$primary-color;
       color: colours.$tertiary-color;
-    border: 4px solid darken(colours.$secondary-color, 10%);
-
+      border: 4px solid darken(colours.$secondary-color, 10%);
     }
   }
 }
@@ -185,30 +163,14 @@ body.themes__fantasy {
     font-weight: bold;
     cursor: pointer;
     border-radius: 100px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
   }
   &__animals {
-    color: colours.$tertiary-color;
-    background-color: colours.$secondary-color;
-
     &:hover {
-      border: 4px solid darken(colours.$tertiary-color, 10%);
+      border: 2px solid white;
+      background-color: pink;
+      color: rebeccapurple;
     }
   }
-  &__space {
-    background-color: blue;
-    color: aliceblue;
-    &:hover {
-      border: 4px solid black;
-      background-color: white;
-      color: black;
-    }
-  }
-  &__fantasy {
-    background-color: colours.$tertiary-color;
-    color: rgb(79, 163, 79);
-    &:hover {
-      border: 4px solid rgb(177, 125, 82);
-    }
-  }
+  
 }
