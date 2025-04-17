@@ -1,0 +1,23 @@
+@use "./colours";
+
+:root {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+$base-font-size: 11px;
+$base-font-type: "Courier New", Courier, Monospace;
+$display-font-type: "Georgia", Georgia, Serif;
+
+body {
+  font-family: $base-font-type;
+  font-size: $base-font-size;
+  padding: 1rem;
+}
